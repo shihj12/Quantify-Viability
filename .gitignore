@@ -1,0 +1,21 @@
+# Virtual environment
+.venv/
+venv/
+
+# Python
+__pycache__/
+*.pyc
+*.pyo
+
+# PyInstaller build output
+build/
+dist/
+
+# Session files written next to image folders
+*.qviability.json
+
+# OS / editor
+.vscode/
+.idea/
+Thumbs.db
+.DS_Store

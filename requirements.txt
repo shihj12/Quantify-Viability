@@ -1,0 +1,13 @@
+# Quantify Viability — runtime dependencies.
+# Install into a Python 3.13 (or 3.12/3.11) virtual environment:
+#   py -V:3.13 -m venv .venv
+#   .venv\Scripts\python -m pip install -r requirements.txt
+PySide6==6.11.1
+pyqtgraph==0.14.0
+opencv-python-headless==4.13.0.92
+numpy==2.4.6
+scikit-image==0.26.0
+pandas==3.0.3
+openpyxl==3.1.5
+pillow==12.2.0
+pyinstaller==6.20.0
