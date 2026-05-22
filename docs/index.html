@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Quantify Viability - Fluorescence Image Quantification</title>
+  <title>ViabilityQuantifier</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -18,16 +18,8 @@
     }
 
     .header {
-      display: flex;
-      align-items: center;
-      gap: 24px;
-      margin-top: 60px;
-      margin-bottom: 16px;
-    }
-
-    .header img {
-      height: 80px;
-      width: auto;
+      margin-top: 80px;
+      margin-bottom: 32px;
     }
 
     h1 {
@@ -35,15 +27,6 @@
       font-weight: 700;
       letter-spacing: 1px;
       color: #ffffff;
-    }
-
-    .subtitle {
-      font-size: 1.1rem;
-      color: #a0a0b0;
-      text-align: center;
-      margin-bottom: 48px;
-      max-width: 600px;
-      padding: 0 16px;
     }
 
     .card {
@@ -54,19 +37,13 @@
       max-width: 540px;
       width: 90%;
       text-align: center;
-      margin-bottom: 16px;
+      margin-bottom: 24px;
     }
 
     .card h2 {
       font-size: 1.3rem;
       margin-bottom: 8px;
       color: #ffffff;
-    }
-
-    .card p {
-      font-size: 0.95rem;
-      color: #a0a0b0;
-      margin-bottom: 20px;
     }
 
     .download-btn {
@@ -81,95 +58,12 @@
       transition: background 0.2s;
     }
 
-    .download-btn:hover {
-      background: #c41530;
-    }
+    .download-btn:hover { background: #c41530; }
 
     .version-info {
       font-size: 0.85rem;
       color: #707080;
       margin-top: 12px;
-    }
-
-    .run-note {
-      font-size: 0.85rem;
-      color: #a0a0b0;
-      margin-top: 14px;
-    }
-
-    .run-note code {
-      background: #0f0f1a;
-      border: 1px solid #2a2a3e;
-      border-radius: 4px;
-      padding: 1px 6px;
-      color: #c0c0d0;
-      font-size: 0.82rem;
-    }
-
-    .alt-link {
-      font-size: 0.9rem;
-      color: #6c63ff;
-      text-decoration: none;
-      display: inline-block;
-    }
-
-    .alt-link:hover {
-      text-decoration: underline;
-    }
-
-    .links {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 6px;
-      margin-bottom: 40px;
-    }
-
-    .features {
-      max-width: 540px;
-      width: 90%;
-      margin-bottom: 40px;
-    }
-
-    .features h3 {
-      font-size: 1rem;
-      color: #a0a0b0;
-      text-transform: uppercase;
-      letter-spacing: 2px;
-      margin-bottom: 16px;
-      text-align: center;
-    }
-
-    .feature-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 12px;
-    }
-
-    .feature {
-      background: #1a1a2e;
-      border: 1px solid #2a2a3e;
-      border-radius: 8px;
-      padding: 16px;
-    }
-
-    .feature strong {
-      display: block;
-      color: #ffffff;
-      margin-bottom: 4px;
-      font-size: 0.95rem;
-    }
-
-    .feature span {
-      font-size: 0.85rem;
-      color: #808090;
-    }
-
-    .requirements {
-      font-size: 0.85rem;
-      color: #707080;
-      text-align: center;
-      margin-bottom: 32px;
     }
 
     .footer {
@@ -178,11 +72,6 @@
       text-align: center;
       font-size: 0.85rem;
       color: #505060;
-    }
-
-    .footer a {
-      color: #6c63ff;
-      text-decoration: none;
     }
 
     .footer .logos {
@@ -203,69 +92,16 @@
 <body>
 
   <div class="header">
-    <h1>Quantify Viability</h1>
+    <h1>ViabilityQuantifier</h1>
   </div>
-
-  <p class="subtitle">
-    Desktop app for intensity and area-based quantification of live/dead
-    fluorescence images &mdash; a guided replacement for the manual ImageJ
-    threshold-and-measure loop.
-  </p>
 
   <div class="card">
     <h2>Download for Windows</h2>
     <a class="download-btn" href="https://github.com/shihj12/Quantify-Viability/releases/latest/download/QuantifyViability-Setup.exe" id="download-link">
-      Download Quantify Viability
+      Download ViabilityQuantifier
     </a>
     <div class="version-info" id="version-info">Loading latest version&hellip;</div>
-    <p class="run-note">
-      Run the installer &mdash; it adds a Start&nbsp;Menu entry and an optional
-      desktop shortcut, and needs no administrator rights.
-    </p>
   </div>
-
-  <div class="links">
-    <a class="alt-link" href="https://github.com/shihj12/Quantify-Viability/releases/latest/download/QuantifyViability-windows.zip" id="portable-link">
-      Prefer no installer? Download the portable .zip
-    </a>
-    <a class="alt-link" href="https://github.com/shihj12/Quantify-Viability">
-      View source &amp; documentation on GitHub
-    </a>
-  </div>
-
-  <div class="features">
-    <h3>What it does</h3>
-    <div class="feature-grid">
-      <div class="feature">
-        <strong>Guided workflow</strong>
-        <span>Load &rarr; Tune &rarr; Review &rarr; Export, fully keyboard-driven.</span>
-      </div>
-      <div class="feature">
-        <strong>Auto-threshold</strong>
-        <span>MaxEntropy starting point; nudge with the arrow keys.</span>
-      </div>
-      <div class="feature">
-        <strong>Live measurements</strong>
-        <span>Positive pixels, area %, mean &amp; integrated intensity.</span>
-      </div>
-      <div class="feature">
-        <strong>Highlight marks</strong>
-        <span>Outline aid makes small blobs easy to see while tuning.</span>
-      </div>
-      <div class="feature">
-        <strong>Exclude regions</strong>
-        <span>Mask out scale bars, text and debris from the count.</span>
-      </div>
-      <div class="feature">
-        <strong>Three exports</strong>
-        <span>Excel results, annotated PNGs, and a before/after QC PDF.</span>
-      </div>
-    </div>
-  </div>
-
-  <p class="requirements">
-    Windows 10 / 11, 64-bit &middot; no Python or other setup required
-  </p>
 
   <div class="footer">
     <div class="logos">
@@ -279,22 +115,15 @@
 
   <script>
     // Fetch the latest release from the GitHub API to show the version and
-    // point each button at the actual uploaded asset.
+    // point the button at the actual uploaded installer.
     fetch("https://api.github.com/repos/shihj12/Quantify-Viability/releases/latest")
       .then(r => r.json())
       .then(data => {
         if (!data.tag_name) return;
         document.getElementById("version-info").textContent =
           `Latest: ${data.tag_name} (${new Date(data.published_at).toLocaleDateString()})`;
-
-        const assets = data.assets || [];
-        const exe = assets.find(a => a.name.endsWith(".exe"));
-        const zip = assets.find(a => a.name.endsWith(".zip"));
+        const exe = (data.assets || []).find(a => a.name.endsWith(".exe"));
         if (exe) document.getElementById("download-link").href = exe.browser_download_url;
-
-        const portable = document.getElementById("portable-link");
-        if (zip) portable.href = zip.browser_download_url;
-        else portable.style.display = "none";
       })
       .catch(() => {
         document.getElementById("version-info").textContent = "";

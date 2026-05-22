@@ -34,7 +34,7 @@ class LoadScreen(QWidget):
         root.setContentsMargins(24, 20, 24, 20)
         root.setSpacing(12)
 
-        title = QLabel("Quantify Viability")
+        title = QLabel("ViabilityQuantifier")
         title.setStyleSheet("font-size: 20px; font-weight: bold;")
         root.addWidget(title)
         root.addWidget(QLabel(

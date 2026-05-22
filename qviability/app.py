@@ -15,7 +15,7 @@ from .ui.threshold_screen import ThresholdScreen
 class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-        self.setWindowTitle("Quantify Viability")
+        self.setWindowTitle("ViabilityQuantifier")
         self.resize(1320, 840)
 
         self.project: Project | None = None

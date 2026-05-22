@@ -8,7 +8,7 @@
 ;   "%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" installer.iss
 ; Produces:  installer\QuantifyViability-Setup.exe
 
-#define AppName "Quantify Viability"
+#define AppName "ViabilityQuantifier"
 #define AppVersion "1.0.0"
 #define AppExe "QuantifyViability.exe"
 #define AppPublisher "Hao Research Group, University of Maryland"
