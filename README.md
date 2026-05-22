@@ -18,6 +18,14 @@ viability ratio — pair the channels yourself in the exported spreadsheet. This
 is deliberate: clumped samples can't be segmented reliably, so the app measures
 total thresholded signal instead.
 
+## Download
+
+**[Download Quantify Viability for Windows](https://shihj12.github.io/Quantify-Viability/)**
+
+No Python or setup needed — unzip the folder and run `QuantifyViability.exe`.
+The download page always points to the latest build; past versions and release
+notes are on the [releases page](https://github.com/shihj12/Quantify-Viability/releases).
+
 ## What gets exported
 
 `viability_results.xlsx` — one row per image with every candidate metric, so
