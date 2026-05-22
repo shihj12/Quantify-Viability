@@ -13,7 +13,7 @@ from qviability.core import autothreshold, image_io, measure         # noqa: E40
 from qviability.core.project import (Channel, ImageEntry, Project)   # noqa: E402
 from qviability.export import annotate, excel                        # noqa: E402
 
-FOLDER = r"C:\Users\shihj\Desktop\4x Tiff Flat"
+FOLDER = os.environ.get("QV_TEST_IMAGES", "")   # set to a folder of test images
 OUT = Path(tempfile.gettempdir()) / "qv_export_check"
 
 
