@@ -22,8 +22,9 @@ total thresholded signal instead.
 
 **[Download Quantify Viability for Windows](https://shihj12.github.io/Quantify-Viability/)**
 
-No Python or setup needed — unzip the folder and run `QuantifyViability.exe`.
-The download page always points to the latest build; past versions and release
+No Python or setup needed — run the installer (Start Menu entry, optional
+desktop shortcut, no admin rights required), or grab the portable `.zip`. The
+download page always points to the latest build; past versions and release
 notes are on the [releases page](https://github.com/shihj12/Quantify-Viability/releases).
 
 ## What gets exported
@@ -74,6 +75,19 @@ This produces `dist\QuantifyViability\QuantifyViability.exe` — double-click to
 run, no Python needed. Zip the whole `dist\QuantifyViability` folder to share
 it with labmates. (The one-folder build avoids most antivirus false positives;
 a one-file `.exe` is more likely to be flagged.)
+
+### Build the installer
+
+With [Inno Setup 6](https://jrsoftware.org/isdl.php) installed, compile the
+installer from the `dist\QuantifyViability` folder produced above:
+
+```
+"%LOCALAPPDATA%\Programs\Inno Setup 6\ISCC.exe" installer.iss
+```
+
+This produces `installer\QuantifyViability-Setup.exe` — a per-user installer
+with a Start Menu entry, an optional desktop shortcut, and an uninstaller; it
+needs no administrator rights.
 
 ## Keyboard shortcuts (tuning screen)
 

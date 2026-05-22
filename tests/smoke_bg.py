@@ -16,7 +16,7 @@ from qviability.app import MainWindow                                # noqa: E40
 from qviability.core import image_io                                 # noqa: E402
 from qviability.core.project import Channel, ImageEntry, Project     # noqa: E402
 
-FOLDER = r"C:\Users\shihj\Desktop\4x Tiff Flat"
+FOLDER = os.environ.get("QV_TEST_IMAGES", "")   # set to a folder of test images
 
 
 def _check(label: str, ok: bool) -> None:

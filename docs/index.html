@@ -110,12 +110,19 @@
       font-size: 0.9rem;
       color: #6c63ff;
       text-decoration: none;
-      margin-bottom: 40px;
       display: inline-block;
     }
 
     .alt-link:hover {
       text-decoration: underline;
+    }
+
+    .links {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 40px;
     }
 
     .features {
@@ -207,19 +214,24 @@
 
   <div class="card">
     <h2>Download for Windows</h2>
-    <a class="download-btn" href="https://github.com/shihj12/Quantify-Viability/releases/latest/download/QuantifyViability-windows.zip" id="download-link">
+    <a class="download-btn" href="https://github.com/shihj12/Quantify-Viability/releases/latest/download/QuantifyViability-Setup.exe" id="download-link">
       Download Quantify Viability
     </a>
     <div class="version-info" id="version-info">Loading latest version&hellip;</div>
     <p class="run-note">
-      Unzip the folder and run <code>QuantifyViability.exe</code> &mdash;
-      no installation needed.
+      Run the installer &mdash; it adds a Start&nbsp;Menu entry and an optional
+      desktop shortcut, and needs no administrator rights.
     </p>
   </div>
 
-  <a class="alt-link" href="https://github.com/shihj12/Quantify-Viability">
-    View source &amp; documentation on GitHub
-  </a>
+  <div class="links">
+    <a class="alt-link" href="https://github.com/shihj12/Quantify-Viability/releases/latest/download/QuantifyViability-windows.zip" id="portable-link">
+      Prefer no installer? Download the portable .zip
+    </a>
+    <a class="alt-link" href="https://github.com/shihj12/Quantify-Viability">
+      View source &amp; documentation on GitHub
+    </a>
+  </div>
 
   <div class="features">
     <h3>What it does</h3>
@@ -267,19 +279,22 @@
 
   <script>
     // Fetch the latest release from the GitHub API to show the version and
-    // point the button at the actual uploaded asset.
+    // point each button at the actual uploaded asset.
     fetch("https://api.github.com/repos/shihj12/Quantify-Viability/releases/latest")
       .then(r => r.json())
       .then(data => {
-        if (data.tag_name) {
-          document.getElementById("version-info").textContent =
-            `Latest: ${data.tag_name} (${new Date(data.published_at).toLocaleDateString()})`;
+        if (!data.tag_name) return;
+        document.getElementById("version-info").textContent =
+          `Latest: ${data.tag_name} (${new Date(data.published_at).toLocaleDateString()})`;
 
-          const zip = (data.assets || []).find(a => a.name.endsWith(".zip"));
-          if (zip) {
-            document.getElementById("download-link").href = zip.browser_download_url;
-          }
-        }
+        const assets = data.assets || [];
+        const exe = assets.find(a => a.name.endsWith(".exe"));
+        const zip = assets.find(a => a.name.endsWith(".zip"));
+        if (exe) document.getElementById("download-link").href = exe.browser_download_url;
+
+        const portable = document.getElementById("portable-link");
+        if (zip) portable.href = zip.browser_download_url;
+        else portable.style.display = "none";
       })
       .catch(() => {
         document.getElementById("version-info").textContent = "";

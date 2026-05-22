@@ -14,7 +14,7 @@ from qviability.core import autothreshold, image_io, measure          # noqa: E4
 from qviability.core.project import (ImageEntry, Project, load_project,  # noqa: E402
                                      save_project)
 
-DEFAULT_IMAGE = r"C:\Users\shihj\Desktop\4x Tiff Flat\Baf1.1_GFP.tif"
+DEFAULT_IMAGE = os.environ.get("QV_TEST_IMAGE", "")   # a test image, or pass one as argv[1]
 
 
 def main() -> int:
