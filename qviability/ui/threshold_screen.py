@@ -242,7 +242,8 @@ class ThresholdScreen(QWidget):
         try:
             self.raw = image_io.get_image(entry.path)
             self.proc = image_io.get_processed(
-                entry.path, self.project.subtract_background)
+                entry.path, self.project.subtract_background,
+                self.project.radius_for(entry.channel))
         except Exception as exc:                       # noqa: BLE001
             entry.missing = True
             self.raw = None
@@ -479,7 +480,8 @@ class ThresholdScreen(QWidget):
                     break
             try:
                 img = image_io.get_processed(
-                    entry.path, self.project.subtract_background)
+                    entry.path, self.project.subtract_background,
+                    self.project.radius_for(entry.channel))
             except Exception:                          # noqa: BLE001
                 continue
             excl = measure.exclusion_mask(img.shape, entry.exclusions)

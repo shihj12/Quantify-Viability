@@ -14,12 +14,12 @@ from PySide6.QtCore import Qt
 from PySide6.QtGui import QColor
 from PySide6.QtWidgets import (QAbstractItemView, QCheckBox, QFileDialog,
                                QGroupBox, QHBoxLayout, QHeaderView, QLabel,
-                               QLineEdit, QPushButton, QTableWidget,
+                               QLineEdit, QPushButton, QSpinBox, QTableWidget,
                                QTableWidgetItem, QVBoxLayout, QWidget)
 
 from ..core import image_io
-from ..core.project import (Channel, ImageEntry, Project, find_session,
-                            load_project)
+from ..core.project import (DEFAULT_BG_RADIUS, Channel, ImageEntry, Project,
+                            find_session, load_project)
 
 
 class LoadScreen(QWidget):
@@ -66,7 +66,28 @@ class LoadScreen(QWidget):
         self.bg_check = QCheckBox(
             "Subtract background (rolling ball) — corrects uneven illumination "
             "before thresholding")
+        self.bg_check.toggled.connect(self._on_bg_toggled)
         root.addWidget(self.bg_check)
+
+        # Per-channel rolling-ball radius. The radius should be at least the
+        # size of the largest object to keep, so the green/GFP and red/RFP
+        # channels typically need different values.
+        self.radius_row = QHBoxLayout()
+        self.radius_row.setContentsMargins(24, 0, 0, 0)
+        self.radius_row.addWidget(QLabel("Rolling-ball radius (px) —  Green:"))
+        self.green_radius = QSpinBox()
+        self.green_radius.setRange(1, 500)
+        self.green_radius.setValue(DEFAULT_BG_RADIUS)
+        self.radius_row.addWidget(self.green_radius)
+        self.radius_row.addSpacing(16)
+        self.radius_row.addWidget(QLabel("Red:"))
+        self.red_radius = QSpinBox()
+        self.red_radius.setRange(1, 500)
+        self.red_radius.setValue(DEFAULT_BG_RADIUS)
+        self.radius_row.addWidget(self.red_radius)
+        self.radius_row.addStretch(1)
+        root.addLayout(self.radius_row)
+        self._on_bg_toggled(False)
 
         buttons = QHBoxLayout()
         self.resume_btn = QPushButton("Resume previous session")
@@ -175,6 +196,10 @@ class LoadScreen(QWidget):
             "#5fd16a" if channel == Channel.GREEN else "#ff6fae"))
         self.table.setItem(r, 2, chan_item)
 
+    def _on_bg_toggled(self, checked: bool) -> None:
+        self.green_radius.setEnabled(checked)
+        self.red_radius.setEnabled(checked)
+
     def _on_item_changed(self, _item) -> None:
         self._update_start_enabled()
 
@@ -197,7 +222,9 @@ class LoadScreen(QWidget):
             return
         project = Project(green_folder=self.green_folder,
                            red_folder=self.red_folder, images=images,
-                           subtract_background=self.bg_check.isChecked())
+                           subtract_background=self.bg_check.isChecked(),
+                           green_bg_radius=self.green_radius.value(),
+                           red_bg_radius=self.red_radius.value())
         self.main.start_project(project)
 
     def _on_resume(self) -> None:

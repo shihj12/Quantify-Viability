@@ -14,8 +14,10 @@ import os
 from dataclasses import dataclass, field
 from pathlib import Path
 
-SCHEMA_VERSION = 1
+SCHEMA_VERSION = 2
 SESSION_SUFFIX = ".qviability.json"
+
+DEFAULT_BG_RADIUS = 50          # rolling-ball radius (ImageJ "Subtract Background" default)
 
 
 class Channel:
@@ -67,9 +69,15 @@ class Project:
     coarse_step: int = 10
     output_folder: str | None = None
     subtract_background: bool = False        # rolling-ball background subtraction
+    green_bg_radius: int = DEFAULT_BG_RADIUS  # rolling-ball radius for green/GFP
+    red_bg_radius: int = DEFAULT_BG_RADIUS    # rolling-ball radius for red/RFP
     schema_version: int = SCHEMA_VERSION
 
     # --- progress helpers -------------------------------------------------
+    def radius_for(self, channel: str) -> int:
+        """Rolling-ball radius to use for an image in *channel*."""
+        return self.red_bg_radius if channel == Channel.RED else self.green_bg_radius
+
     def done_count(self) -> int:
         return sum(1 for e in self.images if e.done)
 

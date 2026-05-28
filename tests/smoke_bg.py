@@ -111,9 +111,16 @@ def test_load_screen() -> None:
     ls.green_folder = FOLDER
     ls.green_filter.setText("GFP")
     ls.bg_check.setChecked(True)
+    ls.green_radius.setValue(75)
+    ls.red_radius.setValue(12)
     ls._on_start()
     _check("load-screen checkbox sets project.subtract_background",
            win.project.subtract_background is True)
+    _check("load-screen spinboxes set per-channel radii",
+           win.project.green_bg_radius == 75 and win.project.red_bg_radius == 12)
+    _check("radius_for returns the per-channel radius",
+           win.project.radius_for(Channel.GREEN) == 75
+           and win.project.radius_for(Channel.RED) == 12)
     win.close()
 
 

@@ -52,7 +52,8 @@ def render_qc_page(project: Project, entry: ImageEntry) -> Image.Image | None:
     if entry.threshold is None:
         return None
     try:
-        raw = image_io.get_processed(entry.path, project.subtract_background)
+        raw = image_io.get_processed(entry.path, project.subtract_background,
+                                     project.radius_for(entry.channel))
     except Exception:                                  # noqa: BLE001
         return None
 

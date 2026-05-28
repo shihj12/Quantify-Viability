@@ -140,9 +140,14 @@ def subtract_background(arr: np.ndarray, radius: int = BG_RADIUS) -> np.ndarray:
 
     Removes smoothly-varying background / uneven illumination. The ball is
     rolled on a downscaled copy for speed — the background is smooth, so this
-    closely matches the full-resolution result (ImageJ does the same).
+    closely matches the full-resolution result (ImageJ does the same). The
+    shrink factor is capped so the downscaled radius stays ~8 px or more;
+    small radii (e.g. for fine puncta) run at full resolution instead of
+    collapsing toward 1 px on the downscaled copy.
     """
-    shrink = 4 if min(arr.shape[:2]) >= 256 else 1
+    shrink = 1
+    if min(arr.shape[:2]) >= 256:
+        shrink = max(1, min(4, radius // 8))
     if shrink > 1:
         small = cv2.resize(arr, (arr.shape[1] // shrink, arr.shape[0] // shrink),
                            interpolation=cv2.INTER_AREA)

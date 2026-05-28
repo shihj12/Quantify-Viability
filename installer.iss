@@ -9,7 +9,7 @@
 ; Produces:  installer\QuantifyViability-Setup.exe
 
 #define AppName "ViabilityQuantifier"
-#define AppVersion "1.0.0"
+#define AppVersion "1.1.0"
 #define AppExe "QuantifyViability.exe"
 #define AppPublisher "Hao Research Group, University of Maryland"
 #define AppUrl "https://github.com/shihj12/Quantify-Viability"

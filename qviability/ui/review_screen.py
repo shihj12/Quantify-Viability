@@ -155,7 +155,8 @@ class ReviewScreen(QWidget):
     def _render_thumb(self, entry):
         try:
             raw = image_io.get_processed(
-                entry.path, self.project.subtract_background)
+                entry.path, self.project.subtract_background,
+                self.project.radius_for(entry.channel))
         except Exception:                              # noqa: BLE001
             return None
         threshold = entry.threshold if entry.threshold is not None else 10 ** 9
@@ -228,7 +229,8 @@ class ReviewScreen(QWidget):
                 continue
             try:
                 raw = image_io.get_processed(
-                    entry.path, self.project.subtract_background)
+                    entry.path, self.project.subtract_background,
+                    self.project.radius_for(entry.channel))
             except Exception:                          # noqa: BLE001
                 continue
             m = entry.measurement
