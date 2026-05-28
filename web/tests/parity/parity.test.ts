@@ -38,7 +38,7 @@ interface Case {
   max_value: number;
   data: number[];
   histogram256: number[];
-  auto: { MaxEntropy: number };
+  auto: Record<string, number>;
   measure: MeasureCase[];
   display: DisplayCase[];
 }
@@ -75,6 +75,14 @@ describe("core parity vs qviability.core", () => {
         expect(autoThreshold(data, c.max_value, "MaxEntropy")).toBe(
           c.auto.MaxEntropy,
         );
+      });
+
+      it("Otsu/Yen/Li/IsoData match scikit-image (within rounding)", () => {
+        for (const method of ["Otsu", "Yen", "Li", "IsoData"]) {
+          const got = autoThreshold(data, c.max_value, method);
+          // ±1 absorbs rare float32/float64 cumsum edge differences.
+          expect(Math.abs(got - c.auto[method])).toBeLessThanOrEqual(1);
+        }
       });
 
       it("measure() matches at every threshold (incl. exclusions)", () => {

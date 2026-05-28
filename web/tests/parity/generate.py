@@ -71,6 +71,8 @@ def main() -> int:
         hist, _ = np.histogram(arr, bins=256, range=(0, mv + 1))
 
         auto_me = autothreshold.threshold_maxentropy(arr, mv)
+        auto_all = {m: int(autothreshold.auto_threshold(arr, mv, m))
+                    for m in autothreshold.METHOD_NAMES}
 
         # measure() at several thresholds, plus one with exclusions.
         thresholds = sorted({auto_me, mv // 4, mv // 2, (3 * mv) // 4, mv})
@@ -101,7 +103,7 @@ def main() -> int:
             "max_value": int(mv),
             "data": arr.flatten().astype(int).tolist(),
             "histogram256": hist.astype(int).tolist(),
-            "auto": {"MaxEntropy": int(auto_me)},
+            "auto": auto_all,
             "measure": measures,
             "display": display,
         })

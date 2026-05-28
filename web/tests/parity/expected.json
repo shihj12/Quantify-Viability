@@ -2267,7 +2267,11 @@
     0
    ],
    "auto": {
-    "MaxEntropy": 49
+    "MaxEntropy": 49,
+    "Otsu": 78,
+    "Yen": 48,
+    "Li": 111,
+    "IsoData": 139
    },
    "measure": [
     {
@@ -10186,7 +10190,11 @@
     7
    ],
    "auto": {
-    "MaxEntropy": 129
+    "MaxEntropy": 129,
+    "Otsu": 126,
+    "Yen": 128,
+    "Li": 101,
+    "IsoData": 126
    },
    "measure": [
     {
@@ -15433,7 +15441,11 @@
     0
    ],
    "auto": {
-    "MaxEntropy": 1
+    "MaxEntropy": 1,
+    "Otsu": 12,
+    "Yen": 12,
+    "Li": 12,
+    "IsoData": 12
    },
    "measure": [
     {
@@ -18168,7 +18180,11 @@
     145
    ],
    "auto": {
-    "MaxEntropy": 2426
+    "MaxEntropy": 2426,
+    "Otsu": 4409,
+    "Yen": 2409,
+    "Li": 2695,
+    "IsoData": 5724
    },
    "measure": [
     {
@@ -24503,7 +24519,11 @@
     6
    ],
    "auto": {
-    "MaxEntropy": 2032
+    "MaxEntropy": 2032,
+    "Otsu": 2041,
+    "Yen": 1985,
+    "Li": 1547,
+    "IsoData": 2047
    },
    "measure": [
     {
