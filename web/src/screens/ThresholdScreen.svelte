@@ -53,6 +53,15 @@
   let loadedPath: string | null = null;
   let ready = $state(false);
 
+  // Coalesce the heavy work (full-image measure + multi-pass overlay paint, and
+  // the base re-render) into a single animation frame. Fast histogram drags,
+  // held arrow keys, and brightness/contrast slider drags fire far more often
+  // than the screen can paint; without this each event ran a full-image pass.
+  let frameId = 0;
+  let overlayDirty = false;
+  let baseDirty = false;
+  let pendingMethod = "Manual";
+
   const entry = $derived(session.current);
   const meas = $derived(entry?.measurement ?? null);
   const project = $derived(session.project);
@@ -83,7 +92,47 @@
     imageCanvas.render();
   }
 
-  function setThreshold(value: number, pushUndo = true, method = "Manual"): void {
+  function scheduleFrame(): void {
+    if (!frameId) frameId = requestAnimationFrame(runFrame);
+  }
+
+  function runFrame(): void {
+    frameId = 0;
+    if (baseDirty) {
+      baseDirty = false;
+      renderBase();
+    }
+    if (overlayDirty) {
+      overlayDirty = false;
+      if (proc && entry && entry.threshold !== null) {
+        entry.measurement = measure(proc.data, entry.threshold, pendingMethod, excludeMask);
+        paintOverlay(entry.threshold);
+      }
+    }
+  }
+
+  /** Run any pending frame work now (used after a load so it paints at once). */
+  function flushFrame(): void {
+    if (frameId) cancelAnimationFrame(frameId);
+    runFrame();
+  }
+
+  /** Drop pending work without running it (used before loading a new image). */
+  function cancelFrame(): void {
+    if (frameId) cancelAnimationFrame(frameId);
+    frameId = 0;
+    overlayDirty = false;
+    baseDirty = false;
+  }
+
+  // `fromHist` skips the redundant histogram line redraw when the change
+  // originated from dragging the histogram itself (it already re-rendered).
+  function setThreshold(
+    value: number,
+    pushUndo = true,
+    method = "Manual",
+    fromHist = false,
+  ): void {
     if (!proc || !entry) return;
     const v = Math.max(0, Math.min(Math.trunc(value), entry.max_value));
     if (pushUndo && entry.threshold !== null) {
@@ -91,9 +140,10 @@
       if (undoStack.length > 200) undoStack = undoStack.slice(-200);
     }
     entry.threshold = v;
-    entry.measurement = measure(proc.data, v, method, excludeMask);
-    paintOverlay(v);
-    histogram?.setThreshold(v);
+    pendingMethod = method;
+    if (!fromHist) histogram?.setThreshold(v);
+    overlayDirty = true;
+    scheduleFrame();
   }
 
   function refreshOverlay(): void {
@@ -108,6 +158,7 @@
     const seq = ++loadSeq;
     loadError = "";
     undoStack = [];
+    cancelFrame(); // drop any pending paint from the previous image
 
     const ref = session.refFor(e.path);
     if (!ref || e.missing) {
@@ -159,6 +210,7 @@
         const method = e.measurement?.method ?? "Manual";
         setThreshold(e.threshold, false, method);
       }
+      flushFrame(); // paint the freshly loaded image immediately
     } catch (err) {
       if (seq === loadSeq) loadError = `Could not load image: ${(err as Error).message}`;
     } finally {
@@ -226,7 +278,10 @@
     if (!entry) return;
     entry.brightness = brightnessVal / 100;
     entry.contrast = contrastVal / 100;
-    if (!spaceHeld) renderBase();
+    if (!spaceHeld) {
+      baseDirty = true;
+      scheduleFrame();
+    }
   }
   function resetDisplay(): void {
     brightnessVal = 0;
@@ -294,10 +349,6 @@
     const boxes = entry.exclusions.map((b) => [...b] as [number, number, number, number]);
     const others = project.images.filter((e) => e !== entry);
     if (others.length === 0) return;
-    const msg = boxes.length
-      ? `Apply the current ${boxes.length} box(es) to all ${project.images.length} images?\n\nThis replaces any exclusion boxes already on the other images.`
-      : `The current image has no exclusion boxes.\n\nRemove exclusion boxes from all other ${others.length} images?`;
-    if (!window.confirm(msg)) return;
 
     for (const o of others) o.exclusions = boxes.map((b) => [...b]);
     const toRecompute = others.filter((o) => o.threshold !== null);
@@ -410,13 +461,14 @@
     imageCanvas = new ImageCanvas(canvasEl);
     imageCanvas.onRegionDrawn = onRegionDrawn;
     histogram = new Histogram(histEl);
-    histogram.onThresholdChange = (v) => setThreshold(v);
+    histogram.onThresholdChange = (v) => setThreshold(v, true, "Manual", true);
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("keyup", onKeyUp);
     ready = true; // flips the load effect on, now that the canvases exist
   });
 
   onDestroy(() => {
+    cancelFrame();
     window.removeEventListener("keydown", onKeyDown);
     window.removeEventListener("keyup", onKeyUp);
     imageCanvas?.destroy();
@@ -540,6 +592,7 @@
       <button onclick={saveSession}>Save</button>
       <button onclick={() => session.go("review")}>Go to Review</button>
     </div>
+    <button onclick={() => session.go("load")}>⌂ Home</button>
 
     <p class="help">
       ↑/↓ tune · Shift or PageUp/Dn = coarse · Enter = accept · ←/→ navigate · R =

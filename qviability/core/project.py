@@ -18,6 +18,8 @@ SCHEMA_VERSION = 2
 SESSION_SUFFIX = ".qviability.json"
 
 DEFAULT_BG_RADIUS = 50          # rolling-ball radius (ImageJ "Subtract Background" default)
+DEFAULT_GREEN_BG_RADIUS = 75    # default rolling-ball radius for green/GFP
+DEFAULT_RED_BG_RADIUS = 5       # default rolling-ball radius for red/RFP
 
 
 class Channel:
@@ -69,8 +71,8 @@ class Project:
     coarse_step: int = 10
     output_folder: str | None = None
     subtract_background: bool = False        # rolling-ball background subtraction
-    green_bg_radius: int = DEFAULT_BG_RADIUS  # rolling-ball radius for green/GFP
-    red_bg_radius: int = DEFAULT_BG_RADIUS    # rolling-ball radius for red/RFP
+    green_bg_radius: int = DEFAULT_GREEN_BG_RADIUS  # rolling-ball radius for green/GFP
+    red_bg_radius: int = DEFAULT_RED_BG_RADIUS      # rolling-ball radius for red/RFP
     schema_version: int = SCHEMA_VERSION
 
     # --- progress helpers -------------------------------------------------

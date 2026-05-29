@@ -12,7 +12,7 @@ import { SESSION_SUFFIX } from "@/core/types";
 import type { DirectorySource, ImageRef } from "./fileSystem";
 import { clearImageCache } from "./imageCache";
 
-export type Screen = "load" | "threshold" | "review";
+export type Screen = "load" | "threshold" | "review" | "howto" | "about";
 
 class SessionStore {
   screen = $state<Screen>("load");

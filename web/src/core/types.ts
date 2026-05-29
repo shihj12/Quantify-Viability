@@ -3,7 +3,8 @@
 
 export const SCHEMA_VERSION = 2;
 export const SESSION_SUFFIX = ".qviability.json";
-export const DEFAULT_BG_RADIUS = 50;
+export const DEFAULT_GREEN_BG_RADIUS = 75;
+export const DEFAULT_RED_BG_RADIUS = 5;
 
 export const Channel = {
   GREEN: "Green",

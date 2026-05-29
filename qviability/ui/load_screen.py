@@ -18,7 +18,8 @@ from PySide6.QtWidgets import (QAbstractItemView, QCheckBox, QFileDialog,
                                QTableWidgetItem, QVBoxLayout, QWidget)
 
 from ..core import image_io
-from ..core.project import (DEFAULT_BG_RADIUS, Channel, ImageEntry, Project,
+from ..core.project import (DEFAULT_GREEN_BG_RADIUS, DEFAULT_RED_BG_RADIUS,
+                            Channel, ImageEntry, Project,
                             find_session, load_project)
 
 
@@ -77,13 +78,13 @@ class LoadScreen(QWidget):
         self.radius_row.addWidget(QLabel("Rolling-ball radius (px) —  Green:"))
         self.green_radius = QSpinBox()
         self.green_radius.setRange(1, 500)
-        self.green_radius.setValue(DEFAULT_BG_RADIUS)
+        self.green_radius.setValue(DEFAULT_GREEN_BG_RADIUS)
         self.radius_row.addWidget(self.green_radius)
         self.radius_row.addSpacing(16)
         self.radius_row.addWidget(QLabel("Red:"))
         self.red_radius = QSpinBox()
         self.red_radius.setRange(1, 500)
-        self.red_radius.setValue(DEFAULT_BG_RADIUS)
+        self.red_radius.setValue(DEFAULT_RED_BG_RADIUS)
         self.radius_row.addWidget(self.red_radius)
         self.radius_row.addStretch(1)
         root.addLayout(self.radius_row)

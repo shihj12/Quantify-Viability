@@ -8,6 +8,8 @@
   import LoadScreen from "@/screens/LoadScreen.svelte";
   import ThresholdScreen from "@/screens/ThresholdScreen.svelte";
   import ReviewScreen from "@/screens/ReviewScreen.svelte";
+  import HowToScreen from "@/screens/HowToScreen.svelte";
+  import AboutScreen from "@/screens/AboutScreen.svelte";
 
   onMount(() => {
     const onBeforeUnload = () => {
@@ -24,6 +26,10 @@
   <ThresholdScreen />
 {:else if session.screen === "review"}
   <ReviewScreen />
+{:else if session.screen === "howto"}
+  <HowToScreen />
+{:else if session.screen === "about"}
+  <AboutScreen />
 {/if}
 
 <style>

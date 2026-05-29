@@ -12,10 +12,7 @@ import { buildPdf, type QcItem } from "./pdf";
 import {
   type ExportFile,
   type DeliveryResult,
-  pickOutputDir,
-  writeFiles,
   zipAndDownload,
-  supportsDirWrite,
 } from "./bundle";
 
 export type DeliveryResultEx = DeliveryResult;
@@ -38,20 +35,14 @@ export interface ExportOutcome {
 }
 
 /**
- * Run the full export. When directory write is supported the picker is opened
- * here (call from a user gesture); otherwise the bundle is zipped & downloaded.
+ * Run the full export. The assembled bundle (annotated PNGs, QC PDF, results
+ * workbook) is always delivered as a single ZIP via the browser's native
+ * download — no File System Access permission prompt.
  */
 export async function runExport(
   project: Project,
   onProgress: ExportProgress = () => {},
 ): Promise<ExportOutcome> {
-  // Acquire the output directory inside the user gesture, before async work.
-  let dir: FileSystemDirectoryHandle | null = null;
-  if (supportsDirWrite) {
-    dir = await pickOutputDir();
-    if (!dir) return { result: { mode: "cancelled" }, pngCount: 0, pdfPages: 0 };
-  }
-
   const images = project.images;
   const tuned = images.filter((e) => e.threshold !== null);
   const total = images.length + tuned.length + 1;
@@ -119,15 +110,8 @@ export async function runExport(
 
   onProgress(total, total, "Delivering…");
 
-  let result: DeliveryResultEx;
-  if (dir) {
-    await writeFiles(dir, files);
-    project.output_folder = dir.name;
-    result = { mode: "folder", folderName: dir.name };
-  } else {
-    zipAndDownload(files);
-    result = { mode: "zip", filename: "viability_export.zip" };
-  }
+  zipAndDownload(files);
+  const result: DeliveryResultEx = { mode: "zip", filename: "viability_export.zip" };
 
   return { result, pngCount: files.filter((f) => f.path.endsWith(".png")).length, pdfPages: qcItems.length };
 }

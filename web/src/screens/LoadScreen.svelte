@@ -14,7 +14,8 @@
   import {
     makeImageEntry,
     SCHEMA_VERSION,
-    DEFAULT_BG_RADIUS,
+    DEFAULT_GREEN_BG_RADIUS,
+    DEFAULT_RED_BG_RADIUS,
     Channel,
     type Project,
     type ImageEntry,
@@ -37,8 +38,8 @@
   let rows = $state<Row[]>([]);
 
   let bgSubtract = $state(false);
-  let greenRadius = $state(DEFAULT_BG_RADIUS);
-  let redRadius = $state(DEFAULT_BG_RADIUS);
+  let greenRadius = $state(DEFAULT_GREEN_BG_RADIUS);
+  let redRadius = $state(DEFAULT_RED_BG_RADIUS);
 
   let resumeDir: DirectorySource | null = null;
   let resumeFile = $state<string | null>(null);
@@ -156,7 +157,16 @@
 </script>
 
 <div class="load">
+  <nav class="topnav">
+    <button class="link" onclick={() => session.go("howto")}>How to</button>
+    <button class="link" onclick={() => session.go("about")}>About</button>
+  </nav>
   <h1>ViabilityQuantifier</h1>
+  {#if session.project}
+    <button class="continue" onclick={() => session.go("threshold")}>
+      Continue current session ▶
+    </button>
+  {/if}
   <p class="lead">
     Choose the folder of green (live / GFP) images and the folder of red (dead /
     RFP) images, then press Start.
@@ -275,6 +285,38 @@
     max-width: 1000px;
     margin: 0 auto;
     padding: 28px 24px 48px;
+  }
+  .topnav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 8px;
+    margin-bottom: 8px;
+  }
+  .topnav .link {
+    background: none;
+    border: none;
+    color: #9ab;
+    cursor: pointer;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+  }
+  .topnav .link:hover {
+    color: #cde;
+    text-decoration: underline;
+  }
+  .continue {
+    background: #2f5d7d;
+    color: #fff;
+    border: 1px solid #2f5d7d;
+    border-radius: 6px;
+    padding: 8px 16px;
+    cursor: pointer;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 12px;
+  }
+  .continue:hover {
+    background: #366c91;
   }
   h1 {
     font-size: 1.7rem;

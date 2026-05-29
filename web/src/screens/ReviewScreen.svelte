@@ -116,7 +116,7 @@
 
 <div class="review">
   <header>
-    <h1>Review — double-check every image</h1>
+    <h1>Review</h1>
     <p class="status">
       {#if project}
         {project.images.length} images · {project.images.length - notDone} accepted ·
@@ -168,6 +168,7 @@
     <button class="export" disabled={exporting} onclick={onExport}>
       {exporting ? "Exporting…" : "Export results ▶"}
     </button>
+    <button onclick={() => session.go("load")}>⌂ Home</button>
   </footer>
 </div>
 
