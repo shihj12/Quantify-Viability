@@ -15,6 +15,8 @@ import {
 import { toImageData } from "@/render/imageData";
 import type { RawImage, Rect } from "@/core/types";
 
+const f32 = Math.fround;
+
 export interface RgbImage {
   data: Uint8ClampedArray; // RGBA, row-major
   width: number;
@@ -46,10 +48,13 @@ function blend(
   color: readonly [number, number, number] | readonly number[],
   alpha: number,
 ): void {
+  // Match annotate.py exactly: blend in float32, then astype(uint8) which
+  // TRUNCATES toward zero (np, not canvas rounding). Pre-flooring an in-range
+  // value means the Uint8ClampedArray store is a no-op, so the byte is exact.
   const ia = 1.0 - alpha;
-  rgba[o] = rgba[o] * ia + color[0] * alpha;
-  rgba[o + 1] = rgba[o + 1] * ia + color[1] * alpha;
-  rgba[o + 2] = rgba[o + 2] * ia + color[2] * alpha;
+  rgba[o] = Math.floor(f32(rgba[o] * ia + color[0] * alpha));
+  rgba[o + 1] = Math.floor(f32(rgba[o + 1] * ia + color[1] * alpha));
+  rgba[o + 2] = Math.floor(f32(rgba[o + 2] * ia + color[2] * alpha));
 }
 
 /**

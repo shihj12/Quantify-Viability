@@ -440,6 +440,9 @@
     {#if loading}<div class="overlaymsg">Loading…</div>{/if}
   </div>
 
+  <!-- svelte-ignore a11y_no_noninteractive_element_interactions -->
+  <!-- mousedown keeps focus off panel buttons so the global tuning keymap
+       (arrows/Enter/Space) is never swallowed — mirrors the desktop NoFocus panel. -->
   <aside class="panel" onmousedown={keepFocusOffButtons}>
     <div class="file">{entry?.display_name ?? "—"}</div>
     <div class="chan">Channel: {entry?.channel ?? ""}</div>
